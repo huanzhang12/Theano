@@ -410,7 +410,7 @@ class GpuCumsum(GpuKernelBase, Op):
                                                  (void*) &offsetY,
                                                  (void*) &offsetZ
                             };
-                        int err = GpuKernel_call(&k_finalCumSum_%(nodename)s, 3, dimBlock, dimGrid, sharedBytes, kernel_params);
+                        int err = GpuKernel_call(&k_finalCumSum_%(nodename)s, 3, dimBlock, dimGrid, 0, kernel_params);
                         if (err != GA_NO_ERROR){
                             PyErr_SetString(PyExc_RuntimeError, "finalCumSum call failed");
                             return -1;
@@ -435,7 +435,7 @@ class GpuCumsum(GpuKernelBase, Op):
                                                  (void*) &(tmp0),
                                                  (void*) &(tmp1)
                         };
-                        int err = GpuKernel_call(&k_cumadd_%(nodename)s, 3, dimBlock, dimGrid, sharedBytes, kernel_params);
+                        int err = GpuKernel_call(&k_cumadd_%(nodename)s, 3, dimBlock, dimGrid, 0, kernel_params);
                         if (err != GA_NO_ERROR){
                             PyErr_SetString(PyExc_RuntimeError, "cumadd call failed");
                             return -1;
