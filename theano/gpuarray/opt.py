@@ -864,25 +864,25 @@ def local_gpua_eye(node, context_name):
 
 
 @register_opt('fast_compile')
-@op_lifter([tensor.nnet.CrossentropySoftmaxArgmax1HotWithBias], cuda_only=True)
+@op_lifter([tensor.nnet.CrossentropySoftmaxArgmax1HotWithBias], cuda_only=False)
 def local_gpua_crossentropysoftmaxargmax1hotwithbias(node, context_name):
     return gpu_crossentropy_softmax_argmax_1hot_with_bias
 
 
 @register_opt('fast_compile')
-@op_lifter([tensor.nnet.CrossentropySoftmax1HotWithBiasDx], cuda_only=True)
+@op_lifter([tensor.nnet.CrossentropySoftmax1HotWithBiasDx], cuda_only=False)
 def local_gpua_crossentropysoftmax1hotwithbiasdx(node, context_name):
     return gpu_crossentropy_softmax_1hot_with_bias_dx
 
 
 @register_opt('fast_compile')
-@op_lifter([tensor.nnet.Softmax], cuda_only=True)
+@op_lifter([tensor.nnet.Softmax], cuda_only=False)
 def local_gpua_softmax(node, context_name):
     return gpu_softmax
 
 
 @register_opt('fast_compile')
-@op_lifter([tensor.nnet.SoftmaxWithBias], cuda_only=True)
+@op_lifter([tensor.nnet.SoftmaxWithBias], cuda_only=False)
 def local_gpua_softmaxwithbias(node, context_name):
     return gpu_softmax_with_bias
 
