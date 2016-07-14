@@ -89,6 +89,10 @@ def makeTester(name, op, gpu_op, cases, checks=None, mode_gpu=mode_with_gpu,
                 raise SkipTest(skip)
 
             for testname, inputs in iteritems(cases):
+                for _ in range(len(inputs)):
+                    if type(inputs[_]) is float:
+                        inputs[_] = numpy.asarray(inputs[_],
+                                                  dtype=theano.config.floatX)
                 self.run_case(testname, inputs)
 
         def run_case(self, testname, inputs):
@@ -396,7 +400,7 @@ def test_gpueye():
         k_symb = numpy.asarray(0)
         out = T.eye(N_symb, M_symb, k_symb, dtype=dtype)
         f = theano.function([N_symb, M_symb],
-                            out,
+                            T.stack(out),
                             mode=mode_with_gpu)
         result = numpy.asarray(f(N, M))
         assert numpy.allclose(result, numpy.eye(N, M_, dtype=dtype))

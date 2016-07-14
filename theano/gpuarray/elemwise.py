@@ -621,7 +621,8 @@ class GpuCAReduceCuda(GpuKernelBase, HideC, CAReduceDtype):
 
         try:
             self.c_code(node, name, inp, out, sub)
-            self.c_support_code_apply(node, name)
+            if not self.gpu_kernels(node, name):
+                return False
         except NotImplementedError:
             return False
         return True
@@ -2585,6 +2586,18 @@ class GpuCAReduceCuda(GpuKernelBase, HideC, CAReduceDtype):
             kernels.append(Kernel(code=sio.getvalue(), name=kname,
                                   params=params, flags=flags, objvar=k_var))
         return kernels
+
+
+# Caching GpuCAReduceCuda
+def gpu_ca_reduce_cuda(scalar_op, axis=None, reduce_mask=None, dtype=None, acc_dtype=None,
+                       pre_scalar_op=None):
+    key = (scalar_op, axis, reduce_mask, dtype, acc_dtype,
+           pre_scalar_op)
+    if key not in gpu_ca_reduce_cuda.cache:
+        gpu_ca_reduce_cuda.cache[key] = GpuCAReduceCuda(scalar_op, axis, reduce_mask, dtype,
+                                                        acc_dtype, pre_scalar_op)
+    return gpu_ca_reduce_cuda.cache[key]
+gpu_ca_reduce_cuda.cache = {}
 
 
 class GpuCAReduceCPY(GpuKernelBase, HideC, CAReduceDtype):
